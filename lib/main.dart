@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'modules/assignments/assignment1/assignment1.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const Assignment1(),
     );
   }
 }
