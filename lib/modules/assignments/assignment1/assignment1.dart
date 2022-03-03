@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yn_flutter/modules/assignments/assignment1/utils/common_utils.dart';
 
 import 'models/image_model.dart';
@@ -41,10 +42,34 @@ class _Assignment1State extends State<Assignment1> {
   List<ImageModel> shuffleImageList = [];
   List<int> resultList = [];
 
+  SharedPreferences? pref;
+
   @override
   void initState() {
     _shuffleList();
+    loadScore();
     super.initState();
+  }
+
+  loadScore() async {
+    pref = await SharedPreferences.getInstance();
+    if (pref != null) {
+      var myScore = pref?.getInt("score");
+      var match = pref?.getInt("match");
+      if (myScore != null) {
+        scoreResult = myScore;
+      }
+      if (match != null) {
+        count = match;
+      }
+      setState(() {});
+    }
+  }
+
+  saveScore(int newScore, int match) async {
+    pref = await SharedPreferences.getInstance();
+    await pref?.setInt("score", newScore);
+    await pref?.setInt("match", match);
   }
 
   @override
@@ -136,7 +161,7 @@ class _Assignment1State extends State<Assignment1> {
       _shuffleList();
       setState(() {});
     } else {
-      Map<int, int> map = resultList.asMap();
+      // Map<int, int> map = resultList.asMap();
       // print(map);
       _showResult();
     }
@@ -153,6 +178,7 @@ class _Assignment1State extends State<Assignment1> {
         if (image.clickable != false) image.clickable = false;
       }
       scoreResult++;
+      saveScore(scoreResult, count);
     } else {
       // print("false");
       isCorrect = false;
@@ -197,7 +223,7 @@ class _Assignment1State extends State<Assignment1> {
             content: Text(score + "$scoreResult out of $totalImages"),
             actions: [
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   count = 1;
                   scoreResult = 0;
                   isResultVisible = false;
@@ -205,6 +231,8 @@ class _Assignment1State extends State<Assignment1> {
                   _shuffleList();
                   setState(() {});
                   Navigator.pop(context);
+                  await pref?.remove("match");
+                  await pref?.remove("score");
                 },
                 child: Text(restart),
               ),
