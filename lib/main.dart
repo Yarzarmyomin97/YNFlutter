@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'YN Flutter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey,
       ),
       home: const HomePage(),
     );

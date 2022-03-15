@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:yn_flutter/models/movie.dart';
 
-class ResultPopular {
-  ResultPopular({
+class MovieResponse {
+  MovieResponse({
     required this.page,
     required this.results,
     required this.totalPages,
@@ -14,12 +14,12 @@ class ResultPopular {
   int totalPages;
   int totalResults;
 
-  factory ResultPopular.fromRawJson(String str) =>
-      ResultPopular.fromJson(json.decode(str));
+  factory MovieResponse.fromRawJson(String str) =>
+      MovieResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory ResultPopular.fromJson(Map<String, dynamic> json) => ResultPopular(
+  factory MovieResponse.fromJson(Map<String, dynamic> json) => MovieResponse(
         page: json["page"],
         results:
             List<Movie>.from(json["results"].map((x) => Movie.fromJson(x))),

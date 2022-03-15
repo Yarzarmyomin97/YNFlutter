@@ -47,12 +47,16 @@ class _HomePageState extends State<HomePage> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : MovieList(title: "Now Playing", mList: nowPlayingMovieList),
+                : MovieList(
+                    tag: "NP",
+                    title: "Now Playing",
+                    mList: nowPlayingMovieList),
             popularMovieList.isEmpty
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : MovieList(title: "Popular", mList: popularMovieList),
+                : MovieList(
+                    tag: "P", title: "Popular", mList: popularMovieList),
           ],
         ));
   }

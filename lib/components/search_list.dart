@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:yn_flutter/components/skeleton_container.dart';
 import 'package:yn_flutter/models/movie.dart';
 import 'package:yn_flutter/network/tmdb_api.dart';
+import 'package:yn_flutter/pages/detail_page.dart';
 
 class SearchList extends StatefulWidget {
   final List<Movie> mList;
@@ -19,58 +22,76 @@ class _SearchListState extends State<SearchList> {
         itemCount: widget.mList.length,
         itemBuilder: (BuildContext context, int index) {
           Movie m = widget.mList[index];
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  height: 100,
-                  width: 150,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        bottomLeft: Radius.circular(10)),
-                    child: Image.network(
-                      m.posterPath == null
-                          ? "http://via.placeholder.com/200x150"
-                          : TMDB_API.imageURL + m.posterPath!,
-                      fit: BoxFit.fill,
-                    ),
+          return InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailPage(
+                    movie: m,
+                    tag: "S" + m.id.toString(),
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 5),
-                        child: Text(
-                          m.title,
-                          maxLines: 2,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText2
-                              ?.copyWith(fontWeight: FontWeight.bold),
+              );
+            },
+            child: Card(
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 100,
+                    width: 150,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8)),
+                      child: CachedNetworkImage(
+                        imageUrl: m.posterPath == null
+                            ? "http://via.placeholder.com/200x150"
+                            : TMDB_API.imageURL + m.posterPath!,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            const SkeletonContainer.rounded(
+                          width: double.infinity,
+                          height: double.infinity,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 5),
-                        child: Text(
-                          m.overview,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                )
-              ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 5),
+                          child: Text(
+                            m.title,
+                            maxLines: 2,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 5),
+                          child: Text(
+                            m.overview,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodyText2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         },
