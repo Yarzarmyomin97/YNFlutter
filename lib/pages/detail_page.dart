@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:yn_flutter/components/blur_background.dart';
+import 'package:yn_flutter/components/loading_image.dart';
 import 'package:yn_flutter/components/recommend_movie_list.dart';
 import 'package:yn_flutter/components/skeleton_container.dart';
 import 'package:yn_flutter/models/cast.dart';
@@ -80,12 +81,7 @@ class _DetailPageState extends State<DetailPage> {
       children: [
         Hero(
           tag: widget.tag,
-          child: CachedNetworkImage(
-            imageUrl: movie.posterPath == null
-                ? "http://via.placeholder.com/200x150"
-                : TMDB_API.imageURL + movie.posterPath!,
-            fit: BoxFit.cover,
-          ),
+          child: LoadingImage(imagePath: movie.posterPath),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -122,44 +118,34 @@ class _DetailPageState extends State<DetailPage> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              c.profilePath == null
-                  ? Container()
-                  : CachedNetworkImage(
-                      imageUrl: movie.posterPath == null
-                          ? "http://via.placeholder.com/200x150"
-                          : TMDB_API.imageURL + c.profilePath!,
-                      imageBuilder: (context, imageProvider) => Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(25)),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) =>
-                          const SkeletonContainer.circular(
-                        width: 50,
-                        height: 50,
-                      ),
-                      // errorWidget: (context, url, error) => errorWidget,
-                    ),
+              CachedNetworkImage(
+                imageUrl: c.profilePath == null
+                    ? "https://via.placeholder.com/150/00ced1/FFFFFF?text=TMDB"
+                    : TMDB_API.imageURL + c.profilePath!,
+                imageBuilder: (context, imageProvider) => CircleAvatar(
+                  radius: 25,
+                  backgroundImage: imageProvider,
+                ),
+                placeholder: (context, url) => const SkeletonContainer.circular(
+                  width: 50,
+                  height: 50,
+                ),
+              ),
               const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    c.originalName,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    c.character!,
-                    style: const TextStyle(color: Colors.white70),
-                  ),
-                ],
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      c.originalName,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      c.character!,
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

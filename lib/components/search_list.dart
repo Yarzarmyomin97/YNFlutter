@@ -5,6 +5,8 @@ import 'package:yn_flutter/models/movie.dart';
 import 'package:yn_flutter/network/tmdb_api.dart';
 import 'package:yn_flutter/pages/detail_page.dart';
 
+import 'loading_image.dart';
+
 class SearchList extends StatefulWidget {
   final List<Movie> mList;
   const SearchList({Key? key, required this.mList}) : super(key: key);
@@ -29,7 +31,7 @@ class _SearchListState extends State<SearchList> {
                 MaterialPageRoute(
                   builder: (context) => DetailPage(
                     movie: m,
-                    tag: "S" + m.id.toString(),
+                    tag: "Search${m.id}",
                   ),
                 ),
               );
@@ -48,17 +50,7 @@ class _SearchListState extends State<SearchList> {
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(8),
                           bottomLeft: Radius.circular(8)),
-                      child: CachedNetworkImage(
-                        imageUrl: m.posterPath == null
-                            ? "http://via.placeholder.com/200x150"
-                            : TMDB_API.imageURL + m.posterPath!,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) =>
-                            const SkeletonContainer.rounded(
-                          width: double.infinity,
-                          height: double.infinity,
-                        ),
-                      ),
+                      child: LoadingImage(imagePath: m.posterPath),
                     ),
                   ),
                   Expanded(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yn_flutter/models/movie.dart';
 import 'package:yn_flutter/network/tmdb_api.dart';
 import 'package:yn_flutter/pages/detail_page.dart';
+import 'loading_image.dart';
 import 'skeleton_container.dart';
 
 class MovieList extends StatefulWidget {
@@ -50,7 +51,7 @@ class _MovieListState extends State<MovieList> {
                         MaterialPageRoute(
                           builder: (context) => DetailPage(
                             movie: m,
-                            tag: widget.tag + m.id.toString(),
+                            tag: "${widget.tag}${m.id}",
                           ),
                         ),
                       );
@@ -70,18 +71,8 @@ class _MovieListState extends State<MovieList> {
                                   topLeft: Radius.circular(12),
                                   topRight: Radius.circular(12)),
                               child: Hero(
-                                tag: widget.tag + m.id.toString(),
-                                child: CachedNetworkImage(
-                                  imageUrl: m.posterPath == null
-                                      ? "http://via.placeholder.com/200x150"
-                                      : TMDB_API.imageURL + m.posterPath!,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      const SkeletonContainer.rounded(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                  ),
-                                ),
+                                tag: "${widget.tag}${m.id}",
+                                child: LoadingImage(imagePath: m.posterPath),
                               ),
                             ),
                           ),

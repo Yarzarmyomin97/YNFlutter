@@ -18,26 +18,34 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: TextField(
-        style: const TextStyle(color: Colors.white),
-        cursorColor: Colors.white,
-        keyboardType: TextInputType.name,
-        textInputAction: TextInputAction.search,
-        onSubmitted: (value) {
-          print(value);
-          movieAPI.searchMovies(value).then((value) {
-            setState(() {
-              searchResult = value;
+          title: SizedBox(
+        height: 50,
+        child: TextField(
+          // style: const TextStyle(color: Colors.white),
+          // cursorColor: Colors.white,
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.search,
+          onSubmitted: (value) {
+            print(value);
+            movieAPI.searchMovies(value).then((value) {
+              setState(() {
+                searchResult = value;
+              });
             });
-          });
-        },
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(borderSide: BorderSide.none),
-          hintText: "Search",
-          hintStyle: TextStyle(color: Colors.white),
-          suffixIcon: Icon(
-            Icons.search,
-            color: Colors.white,
+          },
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25),
+                borderSide: BorderSide.none),
+            hintText: "Search",
+            // hintStyle: TextStyle(color: Theme.of(context).primaryColor),
+            // labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+            suffixIcon: Icon(
+              Icons.search,
+              color: Theme.of(context).primaryColor,
+            ),
+            fillColor: Colors.white,
+            filled: true,
           ),
         ),
       )),

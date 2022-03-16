@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:yn_flutter/models/recommend_movie.dart';
 import 'package:yn_flutter/network/tmdb_api.dart';
 import 'package:yn_flutter/pages/detail_page.dart';
+import 'loading_image.dart';
 import 'skeleton_container.dart';
 
 class RecommendMovieList extends StatefulWidget {
@@ -48,7 +49,7 @@ class _RecommendMovieListState extends State<RecommendMovieList> {
                         MaterialPageRoute(
                           builder: (context) => DetailPage(
                             recommendMovie: m,
-                            tag: "RM" + m.id.toString(),
+                            tag: "RM${m.id}",
                           ),
                         ),
                       );
@@ -68,18 +69,8 @@ class _RecommendMovieListState extends State<RecommendMovieList> {
                                   topLeft: Radius.circular(12),
                                   topRight: Radius.circular(12)),
                               child: Hero(
-                                tag: "RM" + m.id.toString(),
-                                child: CachedNetworkImage(
-                                  imageUrl: m.posterPath == null
-                                      ? "http://via.placeholder.com/200x150"
-                                      : TMDB_API.imageURL + m.posterPath!,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      const SkeletonContainer.rounded(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                  ),
-                                ),
+                                tag: "RM${m.id}",
+                                child: LoadingImage(imagePath: m.posterPath),
                               ),
                             ),
                           ),
