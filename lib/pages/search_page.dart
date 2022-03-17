@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:yn_flutter/components/search_list.dart';
-import 'package:yn_flutter/models/movie.dart';
-import 'package:yn_flutter/network/tmdb_api.dart';
+import 'package:yn_flutter/controllers/search_controller.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -11,9 +11,19 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  var movieAPI = TMDB_API();
-  List<Movie> searchResult = [];
+  // var movieAPI = TMDB_API();
+  // List<Movie> searchResult = [];
+  final SearchController sc = Get.put(SearchController());
 
+  Widget _searchResultList() => sc.searchResults.isEmpty
+      ? Center(
+          child: Text(
+          "Search Movies",
+          style: Theme.of(context).textTheme.headline6,
+        ))
+      : SearchList(
+          mList: sc.searchResults,
+        );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,25 +31,22 @@ class _SearchPageState extends State<SearchPage> {
           title: SizedBox(
         height: 50,
         child: TextField(
-          // style: const TextStyle(color: Colors.white),
-          // cursorColor: Colors.white,
           keyboardType: TextInputType.name,
           textInputAction: TextInputAction.search,
           onSubmitted: (value) {
             print(value);
-            movieAPI.searchMovies(value).then((value) {
-              setState(() {
-                searchResult = value;
-              });
-            });
+            sc.searchMovie(value);
+            // movieAPI.searchMovies(value).then((value) {
+            //   setState(() {
+            //     searchResult = value;
+            //   });
+            // });
           },
           decoration: InputDecoration(
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(25),
                 borderSide: BorderSide.none),
             hintText: "Search",
-            // hintStyle: TextStyle(color: Theme.of(context).primaryColor),
-            // labelStyle: TextStyle(color: Theme.of(context).primaryColor),
             suffixIcon: Icon(
               Icons.search,
               color: Theme.of(context).primaryColor,
@@ -49,15 +56,11 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       )),
-      body: searchResult.isEmpty
-          ? Center(
-              child: Text(
-              "Search Movies",
-              style: Theme.of(context).textTheme.headline6,
-            ))
-          : SearchList(
-              mList: searchResult,
-            ),
+      body: Obx(
+        () {
+          return _searchResultList();
+        },
+      ),
     );
   }
 }

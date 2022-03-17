@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:yn_flutter/models/movie.dart';
-import 'package:yn_flutter/network/tmdb_api.dart';
 import 'package:yn_flutter/pages/detail_page.dart';
 import 'loading_image.dart';
-import 'skeleton_container.dart';
+import 'package:get/get.dart';
 
 class MovieList extends StatefulWidget {
   final String tag;
@@ -37,7 +35,7 @@ class _MovieListState extends State<MovieList> {
             ),
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width,
+            // width: MediaQuery.of(context).size.width,
             height: 250,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -46,15 +44,10 @@ class _MovieListState extends State<MovieList> {
                   Movie m = widget.mList[index];
                   return InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailPage(
-                            movie: m,
-                            tag: "${widget.tag}${m.id}",
-                          ),
-                        ),
-                      );
+                      Get.to(DetailPage(
+                        movie: m,
+                        tag: "${widget.tag}${m.id}",
+                      ));
                     },
                     child: SizedBox(
                       width: 125,
