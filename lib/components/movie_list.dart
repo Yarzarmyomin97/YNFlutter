@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:yn_flutter/models/movie.dart';
 import 'package:yn_flutter/pages/detail_page.dart';
 import 'loading_image.dart';
@@ -44,10 +45,20 @@ class _MovieListState extends State<MovieList> {
                   Movie m = widget.mList[index];
                   return InkWell(
                     onTap: () {
-                      Get.to(DetailPage(
-                        movie: m,
-                        tag: "${widget.tag}${m.id}",
-                      ));
+                      // Get.to(DetailPage(
+                      //   movie: m,
+                      //   tag: "${widget.tag}${m.id}",
+                      // ));
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: DetailPage(
+                            movie: m,
+                            tag: "${widget.tag}${m.id}",
+                          ),
+                        ),
+                      );
                     },
                     child: SizedBox(
                       width: 125,
