@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yn_flutter/components/movie_list.dart';
 import 'package:yn_flutter/controllers/home_controller.dart';
 import 'package:yn_flutter/pages/search_page.dart';
+import 'package:yn_flutter/pages/signin_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -54,7 +56,13 @@ class _HomePageState extends State<HomePage> {
                       fullscreenDialog: true));
             },
             icon: const Icon(Icons.search),
-          )
+          ),
+          IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Get.off(() => const SignInPage());
+              },
+              icon: const Icon(Icons.logout))
         ],
       ),
       body: Obx(() {
